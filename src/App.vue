@@ -1,20 +1,24 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-const toDoArray = [{ desc: "Test", done: false }];
+const toDoArray = ref([{ desc: "Test", done: false }]);
 
 const showCreateBar = ref(false);
 
-// const savedText = ref("");
+const entry = ref("");
 
 function create() {
   showCreateBar.value = true;
-  // if(){}
 }
 
 function update() {}
 
 function erase() {}
+
+function addNewEntry() {
+  toDoArray.value.push({ desc: entry.value, done: false });
+  entry.value = "";
+}
 </script>
 
 <template>
@@ -26,8 +30,12 @@ function erase() {}
       <button @click="update()">Update</button>
       <button @click="erase()">Delete</button>
       <hr />
-      <input type="text" v-if="showCreateBar" />
-      <button>Submit</button>
+      <input
+        type="text"
+        v-model="entry"
+        @keydown.enter="addNewEntry()"
+        v-if="showCreateBar"
+      />
       <div v-for="(item, index) in toDoArray" :key="item.desc">
         <p :class="{ open: !item.done, done: item.done }">
           {{ index + 1 }} : {{ item.desc }}
