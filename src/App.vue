@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-const toDoArray = ref([{ desc: "Test", done: false }]);
+let toDoArray = ref<{ desc: string; done: boolean }[]>([]);
 
 const showCreateBar = ref(false);
+
+let countOfEntrys = 0;
 
 const entry = ref("");
 
@@ -16,6 +18,8 @@ function update() {}
 function erase() {}
 
 function addNewEntry() {
+  countOfEntrys++;
+
   toDoArray.value.push({ desc: entry.value, done: false });
   entry.value = "";
 }
