@@ -7,8 +7,10 @@ const showCreateBar = ref(false);
 const showUpdateBar = ref(false);
 const showDeleteBar = ref(false);
 
+// sideNote: toDoArray.value[listIndex].desc um desc des objektes anzuzeigen.
+
 const entry = ref("");
-const listIndex = 0;
+const listIndex = ref(0);
 
 function create() {
   showCreateBar.value = true;
@@ -28,6 +30,12 @@ function addNewEntry() {
   toDoArray.value.push({ desc: entry.value, done: false });
   entry.value = "";
   showCreateBar.value = false;
+  console.log(toDoArray);
+}
+
+function entryDeletion() {
+  toDoArray.value.splice(listIndex.value - 1, 1);
+  showDeleteBar.value = false;
 }
 </script>
 
@@ -57,7 +65,7 @@ function addNewEntry() {
       <input
         type="text"
         v-model="listIndex"
-        @keydown.enter="erase()"
+        @keydown.enter="entryDeletion()"
         v-if="showDeleteBar"
         placeholder="Enter number to delete"
       />
