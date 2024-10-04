@@ -4,24 +4,30 @@ import { ref } from "vue";
 let toDoArray = ref<{ desc: string; done: boolean }[]>([]);
 
 const showCreateBar = ref(false);
-
-let countOfEntrys = 0;
+const showUpdateBar = ref(false);
+const showDeleteBar = ref(false);
 
 const entry = ref("");
+const listIndex = 0;
 
 function create() {
   showCreateBar.value = true;
 }
 
-function update() {}
+function update() {
+  showUpdateBar.value = true;
+}
 
-function erase() {}
+function erase() {
+  showDeleteBar.value = true;
+}
+
+function updateEntry() {}
 
 function addNewEntry() {
-  countOfEntrys++;
-
   toDoArray.value.push({ desc: entry.value, done: false });
   entry.value = "";
+  showCreateBar.value = false;
 }
 </script>
 
@@ -39,6 +45,21 @@ function addNewEntry() {
         v-model="entry"
         @keydown.enter="addNewEntry()"
         v-if="showCreateBar"
+        placeholder="Enter your entry:"
+      />
+      <input
+        type="text"
+        v-model="listIndex"
+        @keydown.enter="updateEntry()"
+        v-if="showUpdateBar"
+        placeholder="Enter number to update"
+      />
+      <input
+        type="text"
+        v-model="listIndex"
+        @keydown.enter="erase()"
+        v-if="showDeleteBar"
+        placeholder="Enter number to delete"
       />
       <div v-for="(item, index) in toDoArray" :key="item.desc">
         <p :class="{ open: !item.done, done: item.done }">
@@ -56,9 +77,5 @@ body {
   width: 500px;
   border: 2px solid black;
   text-align: center;
-}
-
-button {
-  margin: 10px;
 }
 </style>
