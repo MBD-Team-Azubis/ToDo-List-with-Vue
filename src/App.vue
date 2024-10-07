@@ -41,14 +41,16 @@ function entryDeletion() {
 </script>
 
 <template>
-  <body>
+  <div class="screen">
     <div class="container">
-      <h1>To-Do-List</h1>
-      <hr />
-      <button @click="showBar = 'create'">Create</button>
-      <button @click="showBar = 'update'">Update</button>
-      <button @click="showBar = 'delete'">Delete</button>
-      <hr />
+      <div class="headline">
+        <h1>To-Do-List</h1>
+      </div>
+      <div class="buttons">
+        <button @click="showBar = 'create'">Create</button>
+        <button @click="showBar = 'update'">Update</button>
+        <button @click="showBar = 'delete'">Delete</button>
+      </div>
       <input
         type="text"
         v-model="entry"
@@ -83,15 +85,45 @@ function entryDeletion() {
         </p>
       </div>
     </div>
-  </body>
+  </div>
 </template>
 
 <style scoped>
+body {
+  margin: 0;
+}
+
+div .screen {
+  height: 100vh;
+  background-color: #e9edc9;
+}
+
 .container {
+  background-color: #fefae0;
   margin: 0 auto;
   height: 600px;
-  width: 500px;
+  width: calc(100% / 3);
   border: 2px solid black;
   text-align: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 600;
+  font-size: medium;
+}
+
+.headline {
+  border-bottom: solid black 2px;
+}
+
+.buttons {
+  border-bottom: solid black 2px;
+}
+
+.buttons button {
+  margin: 15px;
+  background-color: #fefae0;
+  width: 5em;
+  height: 2em;
+  font-size: small;
+  font-weight: 600;
 }
 </style>
