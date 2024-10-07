@@ -3,50 +3,26 @@ import { ref } from "vue";
 
 let toDoArray = ref<{ desc: string; done: boolean }[]>([]);
 
-const showCreateBar = ref(false);
-const showUpdateBar = ref(false);
-const showEntryUpdateBar = ref(false);
-const showDeleteBar = ref(false);
+let showBar = ref<"create" | "entryUpdate" | "update" | "delete" | "">("");
 
 // sideNote: toDoArray.value[listIndex].desc um desc des objektes anzuzeigen.
 
 const entry = ref("");
 const listIndex = ref(0);
 
-function create() {
-  showCreateBar.value = true;
-  showUpdateBar.value = false;
-  showEntryUpdateBar.value = false;
-  showDeleteBar.value = false;
-}
-
-function update() {
-  showUpdateBar.value = true;
-  showEntryUpdateBar.value = false;
-  showCreateBar.value = false;
-  showDeleteBar.value = false;
-}
-
-function erase() {
-  showDeleteBar.value = true;
-  showCreateBar.value = false;
-  showUpdateBar.value = false;
-  showEntryUpdateBar.value = false;
-}
-
-function whichEntryToUpdate() {
-  showUpdateBar.value = false;
-  let tempStorage = listIndex.value;
-  entry.value = toDoArray.value[tempStorage - 1].desc;
-  showEntryUpdateBar.value = true;
-}
-
 function addNewEntry() {
   toDoArray.value.push({ desc: entry.value, done: false });
   entry.value = "";
-  showCreateBar.value = false;
+  showBar.value = "";
   console.log(toDoArray);
   listIndex.value = 0;
+}
+
+function whichEntryToUpdate() {
+  showBar.value = "update";
+  let tempStorage = listIndex.value;
+  entry.value = toDoArray.value[tempStorage - 1].desc;
+  showBar.value = "entryUpdate";
 }
 
 function entryUpdate() {
@@ -54,51 +30,51 @@ function entryUpdate() {
   toDoArray.value[tempStorage - 1].desc = entry.value;
   entry.value = "";
   listIndex.value = 0;
-  showEntryUpdateBar.value = false;
+  showBar.value = "";
 }
 
 function entryDeletion() {
   toDoArray.value.splice(listIndex.value - 1, 1);
-  showDeleteBar.value = false;
+  showBar.value = "";
   listIndex.value = 0;
 }
 </script>
 
 <template>
   <body>
-    <div>
+    <div class="container">
       <h1>To-Do-List</h1>
       <hr />
-      <button @click="create()">Create</button>
-      <button @click="update()">Update</button>
-      <button @click="erase()">Delete</button>
+      <button @click="showBar = 'create'">Create</button>
+      <button @click="showBar = 'update'">Update</button>
+      <button @click="showBar = 'delete'">Delete</button>
       <hr />
       <input
         type="text"
         v-model="entry"
         @keydown.enter="addNewEntry()"
-        v-if="showCreateBar"
+        v-if="showBar === 'create'"
         placeholder="Enter your entry:"
       />
       <input
         type="text"
         v-model="listIndex"
         @keydown.enter="whichEntryToUpdate()"
-        v-if="showUpdateBar"
+        v-if="showBar === 'update'"
         placeholder="Enter number to update"
       />
       <input
         type="text"
         v-model="entry"
         @keydown.enter="entryUpdate()"
-        v-if="showEntryUpdateBar"
+        v-if="showBar === 'entryUpdate'"
         placeholder="entry"
       />
       <input
         type="text"
         v-model="listIndex"
         @keydown.enter="entryDeletion()"
-        v-if="showDeleteBar"
+        v-if="showBar === 'delete'"
         placeholder="Enter number to delete"
       />
       <div v-for="(item, index) in toDoArray" :key="item.desc">
@@ -111,7 +87,7 @@ function entryDeletion() {
 </template>
 
 <style scoped>
-body {
+.container {
   margin: 0 auto;
   height: 600px;
   width: 500px;
