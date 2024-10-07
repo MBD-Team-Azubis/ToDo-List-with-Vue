@@ -3,7 +3,9 @@ import { ref } from "vue";
 
 let toDoArray = ref<{ desc: string; done: boolean }[]>([]);
 
-let showBar = ref<"create" | "entryUpdate" | "update" | "delete" | "">("");
+let showBar = ref<"create" | "entryUpdate" | "update" | "delete" | "">(
+  "create"
+);
 
 // sideNote: toDoArray.value[listIndex].desc um desc des objektes anzuzeigen.
 
@@ -89,10 +91,6 @@ function entryDeletion() {
 </template>
 
 <style scoped>
-body {
-  margin: 0;
-}
-
 div .screen {
   height: 100vh;
   background-color: #e9edc9;
@@ -101,7 +99,7 @@ div .screen {
 .container {
   background-color: #fefae0;
   margin: 0 auto;
-  height: 600px;
+  height: auto;
   width: calc(100% / 3);
   border: 2px solid black;
   text-align: center;
