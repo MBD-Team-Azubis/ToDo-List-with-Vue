@@ -5,6 +5,7 @@ let toDoArray = ref<{ desc: string; done: boolean }[]>([]);
 
 const showCreateBar = ref(false);
 const showUpdateBar = ref(false);
+const showEntryUpdateBar = ref(false);
 const showDeleteBar = ref(false);
 
 // sideNote: toDoArray.value[listIndex].desc um desc des objektes anzuzeigen.
@@ -14,28 +15,52 @@ const listIndex = ref(0);
 
 function create() {
   showCreateBar.value = true;
+  showUpdateBar.value = false;
+  showEntryUpdateBar.value = false;
+  showDeleteBar.value = false;
 }
 
 function update() {
   showUpdateBar.value = true;
+  showEntryUpdateBar.value = false;
+  showCreateBar.value = false;
+  showDeleteBar.value = false;
 }
 
 function erase() {
   showDeleteBar.value = true;
+  showCreateBar.value = false;
+  showUpdateBar.value = false;
+  showEntryUpdateBar.value = false;
 }
 
-function updateEntry() {}
+function whichEntryToUpdate() {
+  showUpdateBar.value = false;
+  let tempStorage = listIndex.value;
+  entry.value = toDoArray.value[tempStorage - 1].desc;
+  showEntryUpdateBar.value = true;
+}
 
 function addNewEntry() {
   toDoArray.value.push({ desc: entry.value, done: false });
   entry.value = "";
   showCreateBar.value = false;
   console.log(toDoArray);
+  listIndex.value = 0;
+}
+
+function entryUpdate() {
+  let tempStorage = listIndex.value;
+  toDoArray.value[tempStorage - 1].desc = entry.value;
+  entry.value = "";
+  listIndex.value = 0;
+  showEntryUpdateBar.value = false;
 }
 
 function entryDeletion() {
   toDoArray.value.splice(listIndex.value - 1, 1);
   showDeleteBar.value = false;
+  listIndex.value = 0;
 }
 </script>
 
@@ -58,9 +83,16 @@ function entryDeletion() {
       <input
         type="text"
         v-model="listIndex"
-        @keydown.enter="updateEntry()"
+        @keydown.enter="whichEntryToUpdate()"
         v-if="showUpdateBar"
         placeholder="Enter number to update"
+      />
+      <input
+        type="text"
+        v-model="entry"
+        @keydown.enter="entryUpdate()"
+        v-if="showEntryUpdateBar"
+        placeholder="entry"
       />
       <input
         type="text"
